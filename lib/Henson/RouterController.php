@@ -171,9 +171,16 @@ class RouterController {
   protected function routeAndControl(){
     $route = $this->getRoute();
 
-    $rv = call_user_func( $route );
+    try{
+      $rv = call_user_func( $route );
+      $this->printOutput( $rv );
+    } catch ( Exception $e ){
+      list( $message, $code ) = [ $e, $e->getCode(), ];
+      http_response_code( $code );
+      header( "Content-Type: application/json" );
+      echo $message;
+    }
 
-    $this->printOutput( $rv );
   }
 
   static function run(){
