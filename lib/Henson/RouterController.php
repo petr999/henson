@@ -36,12 +36,20 @@ class RouterController {
   }
 
   protected function addRoutes(){
+    $this->addRoute( 'GET', '/count',  function() {
+      $taskModel = $this->taskModel;
+      $rv = $taskModel->fetchCount();
+
+      return $rv;
+    });
     $this->addRoute( 'GET', '/',  function() {
       $taskModel = $this->taskModel;
       $inputFactory = $this->inputFactory;
-      $fields = [ 'sortBy', 'pageNo', ];
+      $fields = [ 'sortBy', 'sortDir', 'pageNo', ];
       $validate = new Input\Validate( [], [
-        'sortBy' => 'validateSortBy', 'pageNo' => 'validatePageNo', ] );
+        'sortBy' => 'validateSortBy', 'pageNo' => 'validatePageNo',
+        'sortDir' => 'validateSortDir',
+      ] );
       $input = $inputFactory->getInput( $fields, $validate );
 
       $rv = $taskModel->fetchList( $input );

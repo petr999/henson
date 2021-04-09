@@ -16,6 +16,28 @@ class TaskModel{
     $this->dbh = $dbh;
   }
 
+  function getCount(){
+    $rv = [];
+    $dbh = $this->dbh;
+    $limit = $this->limit;
+
+    try {
+      $sql = 'SELECT count(id) FROM tasks ';
+      $statementHandle = $dbh->prepare( $sql );
+      $statementHandle->execute();
+
+      $taskRow = $statementHandle->fetch( \PDO::FETCH_NUM );
+      $rv = $taskRow[0];
+
+
+
+    } catch( PDOException $e ) {
+      $message = $e->getMessage();
+      throw new Exception( "Get count error: '$message'" , 500 );
+    }
+
+    return $rv;
+  }
   function fetchList( $input ){
     $rv = [];
     $dbh = $this->dbh;
@@ -23,11 +45,17 @@ class TaskModel{
     $limit = $this->limit;
 
     try {
+      $rows = [];
+
       $sql = 'SELECT * FROM tasks ';
       if( ! empty( $input[ 'sortBy' ] ) ){
         // $sql .= ' order by :sortBy ';
         $sortBy = $input[ 'sortBy' ];
         $sql .= " order by `$sortBy`";
+        if( ! empty( $input[ 'sortDir' ] ) ){
+          $sortDir = $input[ 'sortDir' ];
+          $sql .= " $sortDir ";
+        }
       }
       $sql .= ' limit :limit ';
       if( ! empty( $input[ 'pageNo' ] ) ){ $sql .= ' offset :offset '; }
@@ -41,16 +69,19 @@ class TaskModel{
       $statementHandle->execute();
 
       while( $taskRow = $statementHandle->fetch( \PDO::FETCH_ASSOC ) ){
-        $rv[] = $taskRow;
+        $isDone = $taskRow[ 'isDone' ];
+        $isDone = $isDone ? 'Edited by Admin' : '';
+        $taskRow[ 'isDone' ] = $isDone;
+        $rows[] = $taskRow;
       }
+
+      $recordsTotal = $this->getCount();
+      $rv[ 'recordsTotal' ] = $recordsTotal;
+      $rv[ 'data' ] = $rows;
 
     } catch( PDOException $e ) {
       $message = $e->getMessage();
       throw new Exception( "Fetch error: '$message'" , 500 );
-    }
-
-    if( empty( $rv ) ){
-      throw new Exception( 'Tasks: no records found', 404 );
     }
 
     return $rv;

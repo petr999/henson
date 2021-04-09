@@ -7,5 +7,4 @@ services:
       - '80:80'
     volumes:
       - './www:/var/www/html'
-      - './var:/var/www/var'
       - './lib:/var/www/lib'

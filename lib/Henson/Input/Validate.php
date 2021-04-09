@@ -57,7 +57,16 @@ class Validate {
   function validateSortBy( $value ){
     $rv = true;
 
-    $rv = in_array( $value, [ 'name', 'email', 'isDone', ] );
+    $rv = in_array( $value, [ 'id', 'name', 'email', 'isDone', ] );
+
+    return $rv;
+  }
+
+  function validateSortDir( $value ){
+    $rv = true;
+
+    $value = strtolower( $value );
+    $rv = in_array( $value, [ 'asc', 'desc', ] );
 
     return $rv;
   }
@@ -91,7 +100,7 @@ class Validate {
     $byValidatorsErrors = $this->validateInputByValidators( $inputArr );
     $validationErrors = array_merge( $mandatoryErrors, $byValidatorsErrors );
     if( ! empty( $validationErrors ) ){
-      throw new Exception( $validationErrors, 422 );
+      throw new Exception( json_encode( $validationErrors ), 422 );
     }
   }
 
