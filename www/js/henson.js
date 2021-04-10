@@ -134,7 +134,7 @@ const editTaskButton = ( data, type, row, meta ) => {
 
 const getErrMsgByResponse = responseJSON => {
   const errMsgs = JSON.parse( responseJSON.description )
-  const errMsg = errMsgs.join( "\n" )
+  const errMsg = Array.isArray( errMsgs ) ? errMsgs.join( "\n" ) : errMsgs
 
   return errMsg
 }
@@ -186,7 +186,7 @@ $(document).ready( () => {
           }).fail(function(jqXHR) {
             const httpStatus = jqXHR.status
             const responseJSON = jqXHR.responseJSON
-            const errMsg = getErrMsgByResponse( responseJSON )
+            const errMsg = responseJSON.description
             onUpdateTaskFail( httpStatus, errMsg )
             return true;
           })

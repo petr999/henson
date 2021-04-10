@@ -157,7 +157,7 @@ class TaskModel{
       $rv = $this->fetchTaskById( $id );
     } catch( PDOException $e ){
       $message = $e->getMessage();
-      throw new Exception( "Fetch error: '$message'" , 500 );
+      throw new Exception( "Update error: '$message'" , 500 );
     }
 
     return $rv;
@@ -189,7 +189,7 @@ class TaskModel{
 
     } catch( PDOException $e ){
       $message = $e->getMessage();
-      throw new Exception( "Fetch error: '$message'" , 500 );
+      throw new Exception( "Create error: '$message'" , 500 );
     }
 
     $task[ 'id' ] = $id;

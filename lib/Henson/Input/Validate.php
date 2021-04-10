@@ -109,7 +109,7 @@ class Validate {
     }
     $validationErrors = array_merge( $mandatoryErrors, $byValidatorsErrors );
     if( ! empty( $validationErrors ) ){
-      throw new Exception( json_encode( $validationErrors ), 422 );
+      throw new Exception( $validationErrors, 422 );
     }
   }
 
