@@ -18,4 +18,4 @@ PSR2.
 
 # Run it!
 
-Go ahead with `docker compose up`.
+Go ahead with `docker compose up`. Then <http://localhost>
