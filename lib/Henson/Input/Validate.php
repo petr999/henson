@@ -22,7 +22,13 @@ class Validate {
     $mandatoryFields = $this->mandatoryFields;
 
     foreach( $mandatoryFields as $mandatoryField ){
-      if( ! isset( $inputArr[ $mandatoryField ] ) ){
+      if( empty( $inputArr[ $mandatoryField ] )
+          && (
+            ( ! isset( $inputArr[ $mandatoryField ] ) )
+              ||
+            '' === $inputArr[ $mandatoryField ]
+          )
+      ){
         $mandatoryErrors[] = "Empty field: '$mandatoryField'";
       }
     }
@@ -97,7 +103,10 @@ class Validate {
 
   function validateInput( $inputArr ){
     $mandatoryErrors = $this->validateInputMandatoryFields( $inputArr );
-    $byValidatorsErrors = $this->validateInputByValidators( $inputArr );
+    $byValidatorsErrors = [];
+    if( empty( $mandatoryErrors ) ){
+      $byValidatorsErrors = $this->validateInputByValidators( $inputArr );
+    }
     $validationErrors = array_merge( $mandatoryErrors, $byValidatorsErrors );
     if( ! empty( $validationErrors ) ){
       throw new Exception( json_encode( $validationErrors ), 422 );

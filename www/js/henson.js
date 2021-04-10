@@ -39,8 +39,8 @@ const onUpdateTaskDone = () => {
 
 }
 
-const onUpdateTaskFail = httpStatus => {
-  alert("Failed to update task")
+const onUpdateTaskFail = ( httpStatus, errMsg ) => {
+  alert( "Failed to update task:\n" + errMsg )
   if( 403 == httpStatus ){
     $('div').modal('hide')
     $('#auth-modal').modal('show')
@@ -129,6 +129,13 @@ const editTaskButton = ( data, type, row, meta ) => {
   return rv
 }
 
+const getErrMsgByResponse = responseJSON => {
+  const errMsgs = JSON.parse( responseJSON.description )
+  const errMsg = errMsgs.join( "\n" )
+
+  return errMsg
+}
+
 $(document).ready( () => {
   $('#tasks').DataTable({
     "searching": false,
@@ -175,7 +182,9 @@ $(document).ready( () => {
 
           }).fail(function(jqXHR) {
             const httpStatus = jqXHR.status
-            onUpdateTaskFail( httpStatus )
+            const responseJSON = jqXHR.responseJSON
+            const errMsg = getErrMsgByResponse( responseJSON )
+            onUpdateTaskFail( httpStatus, errMsg )
             return true;
           })
 
@@ -201,8 +210,10 @@ $(document).ready( () => {
 
         onAddNewTaskDone()
 
-      }).fail(function() {
-          alert("Failed to add task")
+      }).fail(function( jqXHR ) {
+          const responseJSON = jqXHR.responseJSON
+          const errMsg = getErrMsgByResponse( responseJSON )
+          alert("Failed to add task: \n" + errMsg )
       })
 
       return true
@@ -227,7 +238,7 @@ $(document).ready( () => {
         } )
         $('div').modal('hide')
       }).fail(function() {
-        alert("Failed to log in!")
+        alert("Failed to log in! Check name and/or passwd")
       })
 
       return true
