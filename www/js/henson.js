@@ -22,7 +22,10 @@ const reloadTable = () => {
      .draw(false)
 }
 
-const onAddNewTaskDone = () => {
+const onAddNewTaskDone = message => {
+
+  const id = message.id
+  alert( `Task created: ${id}` )
 
   reloadTable()
 
@@ -206,9 +209,10 @@ $(document).ready( () => {
           data: JSON.stringify( formValues ),
           contentType: "application/json",
           dataType: "json"
-      }).done(function() {
+      }).done(function(jqXHR ) {
+        const message = jqXHR.message
 
-        onAddNewTaskDone()
+        onAddNewTaskDone( message )
 
       }).fail(function( jqXHR ) {
           const responseJSON = jqXHR.responseJSON
