@@ -148,7 +148,7 @@ $(document).ready(() => {
     pageLength: 3,
     order: [[0, "desc"]], // first field is 'id'
     ajax: {
-      url: "/api/",
+      url: "api/",
       dataSrc: "data",
       dataFilter: (response) => {
         const json = jQuery.parseJSON(response)
@@ -177,7 +177,7 @@ $(document).ready(() => {
 
         $.ajax({
           type: "PUT",
-          url: "/api/",
+          url: "api/",
           data: JSON.stringify(formValues),
           contentType: "application/json",
           dataType: "json",
@@ -206,7 +206,7 @@ $(document).ready(() => {
 
     $.ajax({
       type: "POST",
-      url: "/api/",
+      url: "api/",
       data: JSON.stringify(formValues),
       contentType: "application/json",
       dataType: "json",
@@ -233,7 +233,7 @@ $(document).ready(() => {
 
     $.ajax({
       type: "POST",
-      url: "/api/user/login",
+      url: "api/user/login",
       data: JSON.stringify(formValues),
       contentType: "application/json",
       dataType: "json",
@@ -259,7 +259,7 @@ $(document).ready(() => {
 
     $.ajax({
       type: "POST",
-      url: "/api/user/logout",
+      url: "api/user/logout",
       data: ``,
       contentType: "application/json",
       dataType: "json",
