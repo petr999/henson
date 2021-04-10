@@ -6,5 +6,5 @@ services:
     ports:
       - '80:80'
     volumes:
-      - './www:/var/www/html/some-site'
+      - './www:/var/www/html'
       - './lib:/var/www/lib'
