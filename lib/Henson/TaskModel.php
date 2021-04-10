@@ -69,9 +69,6 @@ class TaskModel{
       $statementHandle->execute();
 
       while( $taskRow = $statementHandle->fetch( \PDO::FETCH_ASSOC ) ){
-        $isDone = $taskRow[ 'isDone' ];
-        $isDone = $isDone ? 'Edited by Admin' : '';
-        $taskRow[ 'isDone' ] = $isDone;
         $rows[] = $taskRow;
       }
 
@@ -115,6 +112,19 @@ class TaskModel{
     return $rv; // [ { "id":  ... } ]
   }
 
+  protected function determineWasEdited( $id, $taskText ){
+    $wasEdited = false;
+
+    $task = $this->fetchTaskById( $id )[0];
+    $taskTextSaved = $task[ 'taskText' ];
+
+    if( $taskText != $taskTextSaved ){
+      $wasEdited = true;
+    }
+
+    return $wasEdited;
+  }
+
   function updateTask( $input ){
     $dbh = $this->dbh;
     $rv = [];
@@ -131,7 +141,10 @@ class TaskModel{
       },  [ 'taskText', 'isDone',
       ] );
 
+      $wasEdited = $this->determineWasEdited( $id, $taskText );
+
       $statement = $dbh->prepare('update tasks set '
+        .( $wasEdited ? ' wasEdited = true,' : ' ' )
         . ' taskText = :taskText, isDone = :isDone where '
         . 'id = :id'
       );
@@ -163,8 +176,8 @@ class TaskModel{
       ] );
 
       $statement = $dbh->prepare('insert into tasks '
-        . ' ( name, email, taskText ) values '
-        . '( :name, :email, :taskText )'
+        . ' ( name, email, taskText, isDone ) values '
+        . '( :name, :email, :taskText, 0 )'
       );
 
       $statement->bindValue(':name',      $name);

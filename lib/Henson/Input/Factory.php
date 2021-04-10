@@ -78,7 +78,11 @@ class Factory {
     foreach( $varNames as $varName ){
       if( isset( $input[ $varName ] ) ){
         $val = $input[ $varName ];
-        $val = htmlentities( $val, ENT_QUOTES, 'UTF-8' );
+        if( is_bool( $val ) ){
+          $val = $val ? 1 : 0; // sqlite quirk
+        }  else {
+          $val = htmlentities( $val, ENT_QUOTES, 'UTF-8' );
+        }
 
         $rv[ $varName ] = $val;
       }
