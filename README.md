@@ -1,6 +1,6 @@
 # Features missing
 
-Undones to your awareness: docs, autotests, frontend preciosness.
+Undones to your awareness: docs, autotests, l10n, frontend preciosness.
 
 # Relocatability
 
