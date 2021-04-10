@@ -49,9 +49,8 @@ class TaskModel{
 
       $sql = 'SELECT * FROM tasks ';
       if( ! empty( $input[ 'sortBy' ] ) ){
-        // $sql .= ' order by :sortBy ';
         $sortBy = $input[ 'sortBy' ];
-        $sql .= " order by `$sortBy`";
+        $sql .= " order by `$sortBy` collate nocase";
         if( ! empty( $input[ 'sortDir' ] ) ){
           $sortDir = $input[ 'sortDir' ];
           $sql .= " $sortDir ";
