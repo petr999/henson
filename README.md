@@ -1,6 +1,6 @@
-# Features missing
+# Feedback received
 
-Undones to your awareness: docs, autotests, l10n, frontend preciosness.
+<https://github.com/petr999/henson/issues/1>
 
 # Relocatability
 
